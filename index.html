@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Himanshu Bendale | DevOps · DBA · SRE</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --bg4: #1c2128;
+  --border: #30363d;
+  --border2: #3d444d;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --muted2: #4d5562;
+  --blue: #388bfd;
+  --blue-dim: #1f6feb;
+  --blue-bg: #0d1b2a;
+  --green: #3fb950;
+  --green-dim: #26a641;
+  --green-bg: #0d1f12;
+  --yellow: #d29922;
+  --yellow-bg: #1f1500;
+  --red: #f85149;
+  --red-bg: #220c0c;
+  --purple: #bc8cff;
+  --purple-bg: #1a1035;
+  --orange: #db6d28;
+  --cyan: #39c5cf;
+  --cyan-bg: #041f22;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  background: rgba(13,17,23,0.97);
+  border-bottom: 1px solid var(--border);
+  height: 48px;
+  display: flex; align-items: center;
+  padding: 0 1.5rem;
+  gap: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.topbar-brand {
+  color: var(--text);
+  font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none;
+  margin-right: 2rem;
+}
+.topbar-brand .whale {
+  width: 22px; height: 22px;
+  background: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #fff;
+  clip-path: polygon(0 20%, 100% 0, 100% 80%, 0 100%);
+}
+.topbar-nav { display:flex; gap:0; margin-left:auto; }
+.topbar-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0 14px;
+  height: 48px;
+  display: flex; align-items: center;
+  border-bottom: 2px solid transparent;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  transition: color 0.15s, border-color 0.15s;
+}
+.topbar-nav a:hover { color: var(--text); border-bottom-color: var(--border2); }
+.uptime-badge {
+  margin-left: 1.5rem;
+  display: flex; align-items: center; gap: 6px;
+  color: var(--green); font-size: 11px;
+  border: 1px solid var(--green-dim);
+  background: var(--green-bg);
+  padding: 3px 10px;
+}
+.uptime-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── HERO ── */
+.hero {
+  max-width: 1100px; margin: 0 auto;
+  padding: 7rem 1.5rem 4rem;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: start;
+}
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--muted); letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before { content:'$'; color:var(--green); }
+.hero-name {
+  font-family: var(--mono);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+.hero-name .cursor { display:inline-block; width:3px; height:0.9em; background:var(--blue); vertical-align:middle; animation:blink 1s step-end infinite; margin-left:4px; }
+@keyframes blink { 50%{opacity:0} }
+.hero-role {
+  font-family: var(--mono); font-size: 16px;
+  color: var(--blue); margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+.hero-role span { color: var(--muted); }
+.hero-desc { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 2rem; max-width: 480px; }
+.hero-stats {
+  display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+}
+.stat {
+  display: flex; flex-direction: column; gap: 2px;
+  border-left: 2px solid var(--border2);
+  padding-left: 12px;
+}
+.stat-val { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); }
+.stat-label { font-size: 11px; color: var(--muted); }
+.hero-btns { display:flex; gap:10px; flex-wrap:wrap; }
+.btn { font-family: var(--mono); font-size: 12px; padding: 8px 20px; text-decoration: none; display:inline-flex; align-items:center; gap:6px; transition: background 0.15s, color 0.15s, border-color 0.15s; cursor: default; }
+.btn-blue { background: var(--blue-dim); color: #fff; border: 1px solid var(--blue); }
+.btn-blue:hover { background: var(--blue); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border2); }
+.btn-ghost:hover { color: var(--text); border-color: var(--border); }
+
+/* ── KUBECTL OUTPUT PANEL ── */
+.kubectl-panel {
+  background: var(--bg2); border: 1px solid var(--border);
+  font-family: var(--mono); font-size: 11.5px;
+}
+.kubectl-header {
+  background: var(--bg3); border-bottom: 1px solid var(--border);
+  padding: 8px 14px; display:flex; align-items:center; gap:8px;
+}
+.kubectl-tab { color: var(--muted); font-size: 11px; }
+.kubectl-tab.active { color: var(--text); border-bottom: 1px solid var(--blue); padding-bottom:1px; }
+.kubectl-body { padding: 14px; overflow: hidden; }
+.kl-row { display:flex; gap:0; margin-bottom:3px; line-height:1.6; }
+.kl-cmd { color: var(--green); margin-bottom:8px; }
+.kl-cmd::before { content: '❯ '; color: var(--blue); }
+.kl-th { color: var(--muted); font-size: 10px; letter-spacing: 0.08em; margin-bottom:6px; }
+.kl-name { color: var(--blue); min-width: 180px; }
+.kl-ready { color: var(--green); min-width: 60px; }
+.kl-status { min-width: 90px; }
+.kl-running { color: var(--green); }
+.kl-age { color: var(--muted); }
+.kl-sep { color: var(--muted2); margin: 8px 0; }
+
+/* ── SECTION CHROME ── */
+.section { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem; }
+.section-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 2.5rem;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  letter-spacing: 0.08em;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.section-label span { color: var(--text); font-size: 13px; font-weight: 600; font-family: var(--sans); }
+
+/* ── ABOUT / NODE INFO ── */
+.about-grid { display:grid; grid-template-columns:1.3fr 0.7fr; gap:3rem; align-items:start; }
+.about-text p { color: var(--muted); font-size:13px; line-height:1.9; margin-bottom:1rem; }
+.about-text strong { color: var(--text); }
+
+.node-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  font-family: var(--mono); font-size: 12px;
+}
+.node-card-header {
+  background: var(--bg3); border-bottom:1px solid var(--border);
+  padding: 8px 14px; display:flex; align-items:center; gap:8px;
+  font-size: 11px; color: var(--muted);
+}
+.node-icon { width:8px; height:8px; background:var(--blue); border-radius:50%; }
+.node-rows { padding: 10px 0; }
+.node-row { display:flex; border-bottom:1px solid var(--bg3); padding: 7px 14px; }
+.node-row:last-child { border-bottom:none; }
+.node-k { color: var(--muted); width:130px; flex-shrink:0; font-size:11px; }
+.node-v { color: var(--text); }
+.node-v.green { color: var(--green); }
+.node-v.blue { color: var(--blue); }
+
+/* ── DOCKER SKILLS ── */
+.docker-host {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+.docker-host-header {
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  margin-bottom: 1.25rem; display:flex; align-items:center; gap:8px;
+}
+.docker-host-header::before { content: '🐳'; font-size: 14px; }
+.containers-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 12px;
+}
+.dcontainer {
+  border: 1px solid var(--border2); background: var(--bg3);
+  font-family: var(--mono);
+  overflow: hidden;
+}
+.dcontainer-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px;
+}
+.dcontainer-header .status-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.dot-green { background: var(--green); }
+.dot-blue { background: var(--blue); }
+.dot-yellow { background: var(--yellow); }
+.dot-purple { background: var(--purple); }
+.dot-cyan { background: var(--cyan); }
+.dot-orange { background: var(--orange); }
+.cname { color: var(--text); font-size: 11px; font-weight: 500; flex:1; }
+.cstatus { font-size: 10px; color: var(--green); }
+.dcontainer-body { padding: 10px 12px; }
+.cimage { color: var(--muted); font-size: 10px; margin-bottom: 8px; }
+.cimage span { color: var(--blue); }
+.ctags { display:flex; flex-wrap:wrap; gap:4px; }
+.ctag {
+  font-size: 10px; padding: 2px 7px;
+  border: 1px solid; letter-spacing:0.02em;
+}
+.ctag-blue { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-bg); }
+.ctag-green { color: var(--green); border-color: var(--green-dim); background: var(--green-bg); }
+.ctag-yellow { color: var(--yellow); border-color: #5a3e00; background: var(--yellow-bg); }
+.ctag-purple { color: var(--purple); border-color: #4a2a8a; background: var(--purple-bg); }
+.ctag-cyan { color: var(--cyan); border-color: #0a4a50; background: var(--cyan-bg); }
+.ctag-orange { color: var(--orange); border-color: #5a3010; background: #1a0e05; }
+
+/* ── CI/CD PIPELINE ── */
+.pipeline-wrap {
+  background: var(--bg2); border: 1px solid var(--border);
+  font-family: var(--mono);
+}
+.pipeline-run-header {
+  background: var(--bg3); border-bottom: 1px solid var(--border);
+  padding: 10px 16px; display:flex; align-items:center; gap:12px;
+  font-size: 11px; flex-wrap: wrap;
+}
+.run-title { color: var(--text); font-weight:500; }
+.run-branch { color: var(--blue); }
+.run-id { color: var(--muted); margin-left:auto; }
+.pipeline-stages {
+  padding: 1.25rem 1.25rem 0.5rem;
+  display: flex; align-items: stretch; gap: 0;
+  overflow-x: auto;
+}
+.stage {
+  flex: 1; min-width: 110px;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.stage:not(:last-child)::after {
+  content: '→';
+  position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+  color: var(--border2); font-size: 14px; z-index:1;
+}
+.stage-box {
+  margin: 0 12px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  padding: 10px 10px 8px;
+  flex:1; display:flex; flex-direction:column; gap:6px;
+}
+.stage-box.success { border-color: var(--green-dim); background: var(--green-bg); }
+.stage-box.running { border-color: var(--blue-dim); background: var(--blue-bg); }
+.stage-box.queued { border-color: var(--border2); background: var(--bg3); }
+.stage-name { font-size: 10px; color: var(--muted); letter-spacing:0.06em; text-transform:uppercase; }
+.stage-status { font-size: 11px; font-weight:500; }
+.stage-status.s { color: var(--green); }
+.stage-status.r { color: var(--blue); }
+.stage-status.q { color: var(--muted); }
+.stage-dur { font-size: 10px; color: var(--muted); }
+.stage-steps { margin-top: 4px; display:flex; flex-direction:column; gap:2px; }
+.step { font-size: 10px; color: var(--muted); display:flex; align-items:center; gap:4px; }
+.step::before { content:'✓'; color:var(--green); font-size:9px; }
+.step.active::before { content:'▶'; color:var(--blue); animation:blink 1s step-end infinite; }
+.step.q::before { content:'○'; color:var(--muted2); }
+
+.pipeline-log {
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  font-size: 11px; line-height: 1.8;
+}
+.log-line { display:flex; gap:12px; }
+.log-ts { color: var(--muted2); flex-shrink:0; }
+.log-msg { color: var(--muted); }
+.log-msg.ok { color: var(--green); }
+.log-msg.info { color: var(--blue); }
+.log-msg.warn { color: var(--yellow); }
+
+/* ── EXPERIENCE ── */
+.exp-list { display:flex; flex-direction:column; gap:0; }
+.exp-card {
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--bg2);
+  overflow: hidden;
+}
+.exp-card:last-child { border-bottom: 1px solid var(--border); }
+.exp-card-header {
+  background: var(--bg3); border-bottom: 1px solid var(--border);
+  padding: 12px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  font-family: var(--mono); font-size: 12px;
+}
+.exp-org { color: var(--text); font-weight:500; }
+.exp-role-badge { background: var(--blue-bg); border: 1px solid var(--blue-dim); color: var(--blue); font-size: 10px; padding: 2px 8px; }
+.exp-date { color: var(--muted); margin-left:auto; font-size: 11px; }
+.exp-body { padding: 1rem 1.25rem; }
+.exp-bullets { list-style:none; display:flex; flex-direction:column; gap:5px; }
+.exp-bullets li {
+  font-size: 12.5px; color: var(--muted); display:flex; gap:10px; line-height:1.7;
+  padding: 5px 0; border-bottom: 1px solid var(--bg3);
+}
+.exp-bullets li:last-child { border-bottom:none; }
+.li-prefix { color: var(--green); font-family:var(--mono); font-size:11px; flex-shrink:0; margin-top:3px; }
+.exp-bullets li strong { color: var(--text); }
+
+/* ── PROJECTS ── */
+.projects-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1px; background:var(--border); border: 1px solid var(--border); }
+.proj-card {
+  background: var(--bg2); padding: 1.25rem; display:flex; flex-direction:column; gap:10px;
+  transition: background 0.15s;
+  font-family: var(--mono);
+  position: relative;
+}
+.proj-card:hover { background: var(--bg3); }
+.proj-card-top { display:flex; align-items:center; gap:8px; }
+.proj-icon { width:28px; height:28px; background: var(--bg3); border: 1px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:14px; }
+.proj-title { color: var(--blue); font-size:13px; font-weight:500; text-decoration:none; }
+.proj-title:hover { color: var(--text); }
+.proj-desc { color: var(--muted); font-size: 12px; line-height:1.7; font-family:var(--sans); flex:1; }
+.proj-stack { display:flex; flex-wrap:wrap; gap:4px; margin-top:auto; }
+.proj-lang { font-size: 10px; padding: 2px 8px; border: 1px solid var(--border2); color: var(--muted); }
+.proj-link { font-size: 11px; color: var(--muted); text-decoration:none; transition: color 0.15s; }
+.proj-link:hover { color: var(--blue); }
+
+/* ── CONTACT ── */
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+.contact-left h3 { font-family:var(--mono); font-size:18px; color:var(--text); margin-bottom:1rem; }
+.contact-left p { color: var(--muted); font-size: 13px; line-height:1.8; }
+.contact-links { margin-top:1.5rem; display:flex; flex-direction:column; gap:8px; }
+.contact-link {
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  font-family: var(--mono); font-size:12px; color: var(--muted);
+  border: 1px solid var(--border); background: var(--bg2);
+  padding: 10px 14px; transition: border-color 0.15s, color 0.15s;
+}
+.contact-link:hover { border-color: var(--blue); color: var(--blue); }
+.contact-link-icon { color: var(--blue); font-size:13px; width:16px; text-align:center; }
+.contact-form { display:flex; flex-direction:column; gap:12px; }
+.form-field label { display:block; font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:0.08em; margin-bottom:5px; }
+.form-field input, .form-field textarea {
+  width:100%; background:var(--bg2); border:1px solid var(--border);
+  color:var(--text); font-family:var(--mono); font-size:12px;
+  padding:9px 12px; outline:none; transition:border-color 0.15s; resize:vertical;
+}
+.form-field input:focus, .form-field textarea:focus { border-color:var(--blue); }
+.form-field textarea { min-height:110px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+  max-width: 1100px; margin: 0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+
+/* ── ANIMS ── */
+.fade { opacity:0; transform:translateY(16px); transition:opacity 0.55s ease, transform 0.55s ease; }
+.fade.in { opacity:1; transform:none; }
+
+@media (max-width:768px) {
+  .hero { grid-template-columns:1fr; }
+  .about-grid, .contact-grid { grid-template-columns:1fr; }
+  .topbar-nav { display:none; }
+  .pipeline-stages { flex-direction:column; gap:8px; }
+  .stage:not(:last-child)::after { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="topbar-brand" href="#">
+    <div class="whale">K</div>
+    himanshu-bendale
+  </a>
+  <div class="topbar-nav">
+    <a href="#about">node-info</a>
+    <a href="#skills">containers</a>
+    <a href="#pipeline">pipeline</a>
+    <a href="#experience">logs</a>
+    <a href="#projects">repos</a>
+    <a href="#contact">connect</a>
+  </div>
+  <div class="uptime-badge">
+    <div class="uptime-dot"></div>
+    STATUS: RUNNING
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">whoami // jio-platforms-ltd / mumbai-ind</div>
+    <div class="hero-name">Himanshu<br>Bendale<span class="cursor"></span></div>
+    <div class="hero-role">DevOps <span>·</span> DBA <span>·</span> SRE <span>·</span> Full Stack</div>
+    <p class="hero-desc">
+      2+ years shipping production infra at Jio Platforms — CI/CD pipelines on Azure DevOps &amp; Jenkins, Kubernetes clusters on AKS &amp; GKE, Oracle 19c/26ai database administration, and full-stack Django applications. I make deployments boring (in the best way).
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-val">~50%</div><div class="stat-label">deploy time ↓</div></div>
+      <div class="stat"><div class="stat-val">70%</div><div class="stat-label">DB job runtime ↓</div></div>
+      <div class="stat"><div class="stat-val">50%</div><div class="stat-label">image size ↓</div></div>
+      <div class="stat"><div class="stat-val">2+</div><div class="stat-label">years prod infra</div></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-blue">▶ kubectl get repos</a>
+      <a href="mailto:himanshubendale01@gmail.com" class="btn btn-ghost">✉ connect</a>
+    </div>
+  </div>
+
+  <!-- kubectl panel -->
+  <div class="kubectl-panel fade">
+    <div class="kubectl-header">
+      <span class="kubectl-tab active">terminal</span>
+      <span class="kubectl-tab" style="margin-left:12px">describe</span>
+    </div>
+    <div class="kubectl-body">
+      <div class="kl-row kl-cmd">kubectl get pods -n himanshu-ns</div>
+      <div class="kl-row kl-th">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READY&nbsp;&nbsp;STATUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AGE</div>
+      <div class="kl-row"><span class="kl-name">devops-engineer-7f9d4</span><span class="kl-ready">1/1</span><span class="kl-status kl-running">Running</span><span class="kl-age">2y+</span></div>
+      <div class="kl-row"><span class="kl-name">django-fullstack-bc2f1</span><span class="kl-ready">1/1</span><span class="kl-status kl-running">Running</span><span class="kl-age">2y+</span></div>
+      <div class="kl-row"><span class="kl-name">oracle-dba-prod-9a1e3</span><span class="kl-ready">1/1</span><span class="kl-status kl-running">Running</span><span class="kl-age">2y+</span></div>
+      <div class="kl-row"><span class="kl-name">sre-reliability-4c8b2</span><span class="kl-ready">1/1</span><span class="kl-status kl-running">Running</span><span class="kl-age">2y+</span></div>
+      <div class="kl-sep">─────────────────────────────────────</div>
+      <div class="kl-row kl-cmd">kubectl get nodes</div>
+      <div class="kl-row kl-th">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STATUS&nbsp;&nbsp;ROLES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VERSION</div>
+      <div class="kl-row"><span class="kl-name">aks-node-mumbai</span><span class="kl-ready" style="min-width:70px">Ready</span><span class="kl-status kl-running">control-plane</span></div>
+      <div class="kl-row"><span class="kl-name">gke-node-central</span><span class="kl-ready" style="min-width:70px">Ready</span><span class="kl-status kl-running">worker</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-label">// <span>node-info</span></div>
+  <div class="about-grid">
+    <div class="about-text fade">
+      <p>I'm a <strong>DevOps and Database Reliability Engineer</strong> at Jio Platforms Limited, one of India's largest tech organizations. My focus is keeping production systems alive, fast, and deployable — at scale.</p>
+      <p>Day-to-day: designing multi-stage CI/CD pipelines, managing Kubernetes workloads across <strong>AKS and GKE</strong>, diagnosing Oracle bottlenecks via AWR/ASH reports, and automating schema migrations with <strong>Flyway and Liquibase</strong>. I also build full-stack <strong>Django applications</strong> and the infra they run on.</p>
+      <p>I practice <strong>GitOps</strong> — everything is code, everything is versioned, everything is reproducible. If it takes more than one command to deploy, it's not done yet.</p>
+    </div>
+    <div class="node-card fade">
+      <div class="node-card-header">
+        <div class="node-icon"></div>
+        kubectl describe node himanshu
+      </div>
+      <div class="node-rows">
+        <div class="node-row"><span class="node-k">Name:</span><span class="node-v">himanshu-bendale</span></div>
+        <div class="node-row"><span class="node-k">Location:</span><span class="node-v">Mumbai, IN</span></div>
+        <div class="node-row"><span class="node-k">Employer:</span><span class="node-v blue">Jio Platforms Ltd</span></div>
+        <div class="node-row"><span class="node-k">Role:</span><span class="node-v">Assoc. Tech Ops</span></div>
+        <div class="node-row"><span class="node-k">Experience:</span><span class="node-v">2+ years prod</span></div>
+        <div class="node-row"><span class="node-k">Education:</span><span class="node-v">B.E. CompEngg 8.55</span></div>
+        <div class="node-row"><span class="node-k">Status:</span><span class="node-v green">● Ready</span></div>
+        <div class="node-row"><span class="node-k">Conditions:</span><span class="node-v green">Open to work</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCKER SKILLS -->
+<section class="section" id="skills">
+  <div class="section-label">// <span>docker ps -a  &nbsp;·&nbsp; skill containers</span></div>
+  <div class="docker-host fade">
+    <div class="docker-host-header">
+      DOCKER HOST: himanshu-workstation &nbsp;|&nbsp; 6 containers running &nbsp;|&nbsp; 0 exited
+    </div>
+    <div class="containers-grid">
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-blue"></div>
+          <span class="cname">cicd-pipelines</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>devops/cicd:prod</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-blue">Azure DevOps</span>
+            <span class="ctag ctag-blue">Jenkins</span>
+            <span class="ctag ctag-blue">Helm</span>
+            <span class="ctag ctag-blue">GitOps</span>
+            <span class="ctag ctag-blue">Flyway</span>
+            <span class="ctag ctag-blue">Liquibase</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-green"></div>
+          <span class="cname">kubernetes-ops</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>cloud/k8s:prod</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-green">Kubernetes</span>
+            <span class="ctag ctag-green">AKS</span>
+            <span class="ctag ctag-green">GKE</span>
+            <span class="ctag ctag-green">Docker</span>
+            <span class="ctag ctag-green">HPA</span>
+            <span class="ctag ctag-green">RBAC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-yellow"></div>
+          <span class="cname">oracle-dba</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>db/oracle:19c-26ai</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-yellow">Oracle 19c/26ai</span>
+            <span class="ctag ctag-yellow">AWR / ASH</span>
+            <span class="ctag ctag-yellow">SQL Tuning</span>
+            <span class="ctag ctag-yellow">Scheduler</span>
+            <span class="ctag ctag-yellow">Tablespace</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-purple"></div>
+          <span class="cname">full-stack-dev</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>app/django:python3</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-purple">Python</span>
+            <span class="ctag ctag-purple">Django</span>
+            <span class="ctag ctag-purple">Django ORM</span>
+            <span class="ctag ctag-purple">REST API</span>
+            <span class="ctag ctag-purple">Agile</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-cyan"></div>
+          <span class="cname">observability</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>sre/monitoring:latest</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-cyan">VictoriaMetrics</span>
+            <span class="ctag ctag-cyan">Prometheus</span>
+            <span class="ctag ctag-cyan">Grafana</span>
+            <span class="ctag ctag-cyan">Alertmanager</span>
+            <span class="ctag ctag-cyan">Tableau</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dcontainer">
+        <div class="dcontainer-header">
+          <div class="status-dot dot-orange"></div>
+          <span class="cname">infra-iac</span>
+          <span class="cstatus">Up 2y</span>
+        </div>
+        <div class="dcontainer-body">
+          <div class="cimage">IMAGE: <span>cloud/iac:azure-gcp</span></div>
+          <div class="ctags">
+            <span class="ctag ctag-orange">Terraform</span>
+            <span class="ctag ctag-orange">Ansible</span>
+            <span class="ctag ctag-orange">Azure</span>
+            <span class="ctag ctag-orange">GCP</span>
+            <span class="ctag ctag-orange">Linux</span>
+            <span class="ctag ctag-orange">Bash</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CI/CD PIPELINE -->
+<section class="section" id="pipeline">
+  <div class="section-label">// <span>ci/cd &nbsp;·&nbsp; deployment pipeline</span></div>
+  <div class="pipeline-wrap fade">
+    <div class="pipeline-run-header">
+      <span class="run-title">deploy/himanshu-prod</span>
+      <span class="run-branch">⎇ main</span>
+      <span style="color:var(--green); font-size:11px;">● passed</span>
+      <span class="run-id">run #247 · triggered on push</span>
+    </div>
+    <div class="pipeline-stages">
+
+      <div class="stage">
+        <div class="stage-box success">
+          <div class="stage-name">source</div>
+          <div class="stage-status s">✓ passed</div>
+          <div class="stage-dur">0m 12s</div>
+          <div class="stage-steps">
+            <div class="step">git checkout</div>
+            <div class="step">scm polling</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-box success">
+          <div class="stage-name">build</div>
+          <div class="stage-status s">✓ passed</div>
+          <div class="stage-dur">1m 43s</div>
+          <div class="stage-steps">
+            <div class="step">docker build</div>
+            <div class="step">image push</div>
+            <div class="step">flyway migrate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-box success">
+          <div class="stage-name">test / uat</div>
+          <div class="stage-status s">✓ passed</div>
+          <div class="stage-dur">3m 18s</div>
+          <div class="stage-steps">
+            <div class="step">unit tests</div>
+            <div class="step">db integrity</div>
+            <div class="step">env gate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-box success">
+          <div class="stage-name">deploy</div>
+          <div class="stage-status s">✓ passed</div>
+          <div class="stage-dur">2m 05s</div>
+          <div class="stage-steps">
+            <div class="step">helm upgrade</div>
+            <div class="step">rolling update</div>
+            <div class="step">health probe</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-box success">
+          <div class="stage-name">verify</div>
+          <div class="stage-status s">✓ passed</div>
+          <div class="stage-dur">0m 48s</div>
+          <div class="stage-steps">
+            <div class="step">smoke tests</div>
+            <div class="step">grafana alert</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="pipeline-log">
+      <div class="log-line"><span class="log-ts">14:22:01</span><span class="log-msg info">[azure-devops] Pipeline triggered by commit a3f92c1 — "feat: optimize oracle scheduler jobs"</span></div>
+      <div class="log-line"><span class="log-ts">14:22:14</span><span class="log-msg ok">[build] Docker image built — size reduced 50% via multi-stage</span></div>
+      <div class="log-line"><span class="log-ts">14:23:57</span><span class="log-msg ok">[flyway] 3 migrations applied successfully → prod schema v47</span></div>
+      <div class="log-line"><span class="log-ts">14:25:44</span><span class="log-msg ok">[k8s] Rolling update complete — 3/3 pods Running on AKS node-pool</span></div>
+      <div class="log-line"><span class="log-ts">14:26:32</span><span class="log-msg ok">[sre] All health checks passed · deployment time ↓50% vs baseline</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="section-label">// <span>kubectl logs &nbsp;·&nbsp; experience</span></div>
+  <div class="exp-list fade">
+    <div class="exp-card">
+      <div class="exp-card-header">
+        <span class="exp-org">Jio Platforms Limited</span>
+        <span class="exp-role-badge">Associate Tech Operations</span>
+        <span class="exp-date">Dec 2023 — Present · Mumbai</span>
+      </div>
+      <div class="exp-body">
+        <ul class="exp-bullets">
+          <li><span class="li-prefix">[CICD]</span><span>Designed and maintained CI/CD pipelines on <strong>Azure DevOps</strong> and <strong>Jenkins</strong> — multi-stage with artifact management, environment gates, and rollback strategies, cutting deployment time by <strong>~50%</strong>.</span></li>
+          <li><span class="li-prefix">[K8S]</span><span>Managed production <strong>Kubernetes</strong> clusters on <strong>AKS</strong> (Azure) and <strong>GKE</strong> (GCP) — workload scheduling, namespace RBAC, resource quotas, ConfigMap/Secret management, and cluster upgrades.</span></li>
+          <li><span class="li-prefix">[OBS]</span><span>Deployed and operated <strong>VictoriaMetrics</strong> as long-term metrics backend; configured Prometheus scrape targets, alerting rules, and <strong>Grafana</strong> dashboards for infra and app observability.</span></li>
+          <li><span class="li-prefix">[DBA]</span><span>Oracle 19c DBA — analyzed <strong>AWR &amp; ASH</strong> reports to identify high-load SQL, wait events, and I/O bottlenecks; optimized Oracle Scheduler jobs reducing average runtime by <strong>70%</strong>.</span></li>
+          <li><span class="li-prefix">[MIGR]</span><span>Automated <strong>Oracle schema deployments</strong> via <strong>Flyway</strong> and Docker; containerized migration workflows cutting image size by 50% and standardizing across dev, UAT, and prod.</span></li>
+          <li><span class="li-prefix">[API]</span><span>Integrated <strong>Azure DevOps REST API</strong> to trigger release pipelines cross-project; eliminated manual release handoffs entirely through automated payload dispatch.</span></li>
+          <li><span class="li-prefix">[SRE]</span><span>Wrote <strong>Bash and Python</strong> scripts for DB health checks, K8s pod lifecycle, log rotation, and release automation; enforced <strong>GitOps</strong> practices via branching strategy and SCM polling.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects">
+  <div class="section-label">// <span>git log &nbsp;·&nbsp; projects &amp; repos</span></div>
+  <div class="projects-grid">
+    <div class="proj-card fade">
+      <div class="proj-card-top">
+        <div class="proj-icon">⎈</div>
+        <span class="proj-title">K8s Deployment — Django App</span>
+      </div>
+      <div class="proj-desc">Containerized Django with Docker, deployed on Kubernetes with 3 replicas, rolling update strategy, env-specific ConfigMaps, HPA auto-scaling, and LoadBalancer services on AKS &amp; GKE.</div>
+      <div class="proj-stack">
+        <span class="proj-lang">Docker</span><span class="proj-lang">Kubernetes</span><span class="proj-lang">AKS</span><span class="proj-lang">GKE</span><span class="proj-lang">HPA</span>
+      </div>
+    </div>
+    <div class="proj-card fade">
+      <div class="proj-card-top">
+        <div class="proj-icon">🗄</div>
+        <a class="proj-title" href="https://github.com/himanshuvb/flyway_oracle" target="_blank">Oracle DB CI/CD — Flyway + Jenkins</a>
+      </div>
+      <div class="proj-desc">End-to-end Oracle DB migration pipeline using Flyway, Docker Compose, and Jenkins — Jenkinsfile stages with agent labels, SCM polling, containerized build agents for isolated reproducible runs.</div>
+      <div class="proj-stack">
+        <span class="proj-lang">Oracle</span><span class="proj-lang">Flyway</span><span class="proj-lang">Jenkins</span><span class="proj-lang">Docker</span>
+      </div>
+      <a href="https://github.com/himanshuvb/flyway_oracle" class="proj-link" target="_blank">↗ github.com/himanshuvb/flyway_oracle</a>
+    </div>
+    <div class="proj-card fade">
+      <div class="proj-card-top">
+        <div class="proj-icon">🍃</div>
+        <span class="proj-title">MongoDB Schema Versioning</span>
+      </div>
+      <div class="proj-desc">Implemented Liquibase change sets for MongoDB — versioned rolling schema updates fully decoupled from the Spring Boot deployment lifecycle. Safe, auditable, automated.</div>
+      <div class="proj-stack">
+        <span class="proj-lang">Liquibase</span><span class="proj-lang">MongoDB</span><span class="proj-lang">Spring Boot</span>
+      </div>
+    </div>
+    <div class="proj-card fade">
+      <div class="proj-card-top">
+        <div class="proj-icon">🐘</div>
+        <span class="proj-title">SQLite → PostgreSQL Migration</span>
+      </div>
+      <div class="proj-desc">Migrated a Django app's datastore to PostgreSQL with schema validation, foreign key integrity checks, and zero data loss using Django ORM migrations and custom management commands.</div>
+      <div class="proj-stack">
+        <span class="proj-lang">Django</span><span class="proj-lang">PostgreSQL</span><span class="proj-lang">Django ORM</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-label">// <span>kubectl exec &nbsp;·&nbsp; get in touch</span></div>
+  <div class="contact-grid fade">
+    <div class="contact-left">
+      <h3>$ connect --handshake</h3>
+      <p>Open to DevOps, SRE, DBA, or full-stack engineering roles. Whether it's a production incident, a pipeline to design, or a new opportunity — reach out. I respond within 24h.</p>
+      <div class="contact-links">
+        <a href="mailto:himanshubendale01@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉</span>himanshubendale01@gmail.com
+        </a>
+        <a href="https://github.com/himanshuvb" target="_blank" class="contact-link">
+          <span class="contact-link-icon">⌥</span>github.com/himanshuvb
+        </a>
+        <a href="https://linkedin.com/in/himanshu-bendale-661a401b7/" target="_blank" class="contact-link">
+          <span class="contact-link-icon">in</span>linkedin.com/in/himanshu-bendale
+        </a>
+        <a href="tel:+919890048372" class="contact-link">
+          <span class="contact-link-icon">#</span>+91 98900 48372
+        </a>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="handleForm(event)">
+      <div class="form-field"><label>NAME</label><input type="text" placeholder="Jane Smith" required></div>
+      <div class="form-field"><label>EMAIL</label><input type="email" placeholder="jane@company.com" required></div>
+      <div class="form-field"><label>MESSAGE</label><textarea placeholder="Hey Himanshu, we have a DevOps/SRE role..."></textarea></div>
+      <button type="submit" class="btn btn-blue" style="align-self:flex-start; border:none;">▶ send --message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>himanshu-bendale · devops · dba · sre · mumbai-ind</span>
+  <span style="color:var(--green)">● all systems operational</span>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+function handleForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.textContent = '✓ message sent';
+  btn.style.background = 'var(--green-bg)';
+  btn.style.borderColor = 'var(--green-dim)';
+  btn.style.color = 'var(--green)';
+}
+</script>
+</body>
+</html>
